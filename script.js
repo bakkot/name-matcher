@@ -185,6 +185,9 @@ function loadCards(scores) {
         return;
       }
       let name = names[currentIndex];
+      if (event.key === 'ArrowUp') {
+        delete scores[name]; // put it at the end
+      }
       scores[name] = score;
       localStorage.setItem(storageKey, JSON.stringify(scores));
       currentIndex++;
