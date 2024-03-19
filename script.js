@@ -160,9 +160,21 @@ function loadCards(scores) {
   document.addEventListener(
     'keydown',
     event => {
-      if (!['ArrowRight', 'ArrowLeft'].includes(event.key)) {
+      if (!['ArrowRight', 'ArrowLeft', 'ArrowUp'].includes(event.key)) {
         return;
       }
+
+      let score = {
+        ArrowRight: 1,
+        ArrowLeft: -1,
+        ArrowUp: 0,
+      }[event.key];
+
+      let act = {
+        ArrowRight: 'slide-right',
+        ArrowLeft: 'slide-left',
+        ArrowUp: 'slide-up',
+      }[event.key];
 
       if (timeout !== -1) {
         clearTimeout(timeout);
@@ -172,13 +184,12 @@ function loadCards(scores) {
       if (currentIndex >= names.length) {
         return;
       }
-      let accept = event.key === 'ArrowRight';
       let name = names[currentIndex];
-      scores[name] = accept ? 1 : -1;
+      scores[name] = score;
       localStorage.setItem(storageKey, JSON.stringify(scores));
       currentIndex++;
 
-      currentCard.classList.add(accept ? 'slide-right' : 'slide-left');
+      currentCard.classList.add(act);
       nextCard.classList.add('shadow');
       if (currentIndex < names.length) {
         nextCard.classList.remove('hide');
@@ -197,7 +208,7 @@ function loadCards(scores) {
     currentCard.textContent = names[currentIndex];
     nextCard.textContent = names[currentIndex + 1] ?? names[0];
     nextCard.classList.add('hide');
-    currentCard.classList.remove('slide-left', 'slide-right');
+    currentCard.classList.remove('slide-left', 'slide-right', 'slide-up');
   }
 }
 
